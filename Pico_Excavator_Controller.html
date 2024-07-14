@@ -3,13 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pico 小挖土機控制器</title>
+    <title>Pico 小挖土機控制器 by Mason</title>
     <style>
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
             font-family: Arial, sans-serif;
+        }
+        h2 {
+            text-align: center;
+			font-size: 14px;
+            margin-top: 10px;
+            margin-left: 50px; /* 调整左边距，微调标题位置 */
         }
         h1 {
             text-align: center;
@@ -101,6 +107,7 @@
 </head>
 <body>
     <h1>Pico 小挖土機控制器</h1>
+	<h2>先確認開啟 chrome://flags/#enable-experimental-web-platform-features</h2>
     <div class="container">
         <div class="controls">
             <button id="upBtn" onmousedown="startSending('u')" onmouseup="stopSending()">↑</button>
@@ -138,6 +145,7 @@
         let playbackIndex = 0;
         let playbackInterval;
         let playbackStartTime;
+		let button_onoff = false; 
         const statusDiv = document.getElementById('status');
         const playbackStatusDiv = document.getElementById('playbackStatus');
 
@@ -150,6 +158,7 @@
                 statusDiv.textContent = '已連線';
                 updateButtonColors('lightyellow');
 				updateRecordColors();
+				button_onoff = true; 
             } catch (error) {
                 console.error('Failed to connect: ', error);
             }
@@ -187,6 +196,7 @@
         }
 		
         function toggleRecording() {
+		  if (button_onoff) { 
             if (isRecording) {
                 isRecording = false;
 			    recordBtn.innerText = '錄動作';
@@ -211,9 +221,11 @@
                 startTime = Date.now();
                 console.log('Recording started');
             }
+		  }
         }
 
         function playRecording() {
+		  if (button_onoff) {
             const fileInput = document.getElementById('fileInput');
             fileInput.value = ''; // 重置文件選擇器
 
@@ -245,6 +257,7 @@
             };
 
             fileInput.click(); // 觸發文件選擇器彈窗
+		  }
         }
 
         function playbackCommand() {
@@ -274,6 +287,7 @@
         }
 
         document.addEventListener('keydown', (event) => {
+		  if (button_onoff) {
             switch (event.key) {
                 case 'ArrowUp':
                     startSending('u');
@@ -294,9 +308,11 @@
                     startSending('b');
                     break;
             }
+		  }
         });
 
         document.addEventListener('keyup', (event) => {
+		   if (button_onoff) {
             switch (event.key) {
                 case 'ArrowUp':
                 case 'ArrowDown':
@@ -307,6 +323,7 @@
                     stopSending();
                     break;
             }
+		  }
         });
     </script>
 </body>
